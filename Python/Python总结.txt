@@ -1,0 +1,31 @@
+Python
+1.包的概念，物理结构 _init_.py
+2.模块      逻辑概念 + 物理概念（一个文件） import module ; from module import str,fun
+3.类         class、
+            与Java不同的地方：   ①修改静态全局变量，通过实例不可修改，只有通过CLASSNAME.paramName修改；但是变量若为引用类型变量（列表，字典时），通过实例也可添加or修改
+            ②类内部定义普通成员函数时，需传递self（作为都第一个变量），意指传递实例给此函数
+            ③静态方法，类方法表示  -----Java类方法即静态方法
+                    @classmethod
+                    def staticC(cls):
+                        print ("static ::",cls.__name__)
+                    @staticmethod
+                    def staticCC():
+                        print ("static fun: wu can")
+            ④继承  子类继承父类，重写__init__方法，子类不会自动调用基类的__init__方法，必须显示调用。
+                    FU类名._init_(self)
+                    super(子类名，self)._init_()
+4.函数       def、
+Python 一切 皆对象 。 
+        类和函数 内部都可以定义成员函数，属性等。不同是运行时，类会创建一个对象，类像一个容器类型，同时可以继承父类，有构造方法。 
+        
+5.Python两次重要特性加强：
+    ①列表解析 [a*a for a in range(10) if a%2==0]
+    ②生成器 生成器（generator object）是一种特殊的迭代器，不过这种迭代器更加优雅，他不需要像普通的迭代器类iter()一样实现__iter__()和__next__()方法，
+             只需要一个yiled关键字，生成器一定是迭代器（反之不成立） （a*a for a in range(10) if a%2==0）
+             
+             def something():                           def  iter_something():                 def iter__xx():
+                result =[]                                   for x in list(List):                  yield  1 
+                for x in list(List):                              yield x                          yield  x   ===+++> p=iter__xx()  next(p)【1】next(p)【x】  
+                    result.append(x)                    函数iter-something()调用时并不会执行，只有显示或隐示调用next的时候才会执行函数体
+                return result
+    理解：生成器（包含yield关键字的语句或函数）是用yield关键字代替了普通迭代器的__iter__()和__next__()方法实现。

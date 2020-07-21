@@ -1,0 +1,31 @@
+
+LOAD语句学习：
+LOAD DATA INFILE 'C:/Users/10224556/Desktop/vr_data_terminate_log.csv' IGNORE INTO TABLE VidTerminalData FIELDS TERMINATED BY ',' enclosed by '"' escaped by '\\' LINES TERMINATED BY '\r\n' IGNORE 1 LINES  (@1,@2,@3) set column1=@1,column3= case @2 when '' then null else @2 end, column4=@3
+注：line后为csv中列的情况，若跳过则用 @1，，@3 若少则入部分列
+set后为给表中colum赋值情况，column1，column2必须为table中字段
+    
+
+基本语法：
+load data  [low_priority] [local] infile 'file_name txt' [replace | ignore]
+into table tbl_name
+[fields
+[terminated by't']
+[OPTIONALLY] enclosed by '']
+[escaped by'\' ]]
+[lines terminated by'n']
+[ignore number lines]
+[(col_name,   )] 
+
+
+（3）、replace和ignore关键词控制对现有的唯一键记录的重复的处理。如果你指定replace，新行将代替有相同的唯一键值的现有行。如果你指定ignore，跳过有唯一键的现有行的重复行的输入。如果你不指定任何一个选项，当找到重复键时，出现一个错误，并且文本文件的余下部分被忽略。例如：
+load data  low_priority infile "S:/tab_user.txt" replace into table tab_user;
+（4）、分隔符
+（a） fields关键字指定了文件记段的分割格式，如果用到这个关键字，MySQL剖析器希望看到至少有下面的一个选项：
+terminated by描述字段的分隔符，默认情况下是tab字符（\t） 
+enclosed by描述的是字段的括起字符。
+escaped by描述的转义字符。默认的是反斜杠（backslash：\ ）  
+例如：load data infile "S:/tab_user.txt" replace into table tab_user （id,name） terminated by','  ignore 1 lines;(,作为分隔符)
+（b）lines 关键字指定了每条记录的分隔符默认为'\n'即为换行符
+如果两个字段都指定了那fields必须在lines之前。如果不指定fields关键字缺省值与如果你这样写的相同： fields terminated by'\t' enclosed by ’ '' ‘ escaped by'\\'
+如果你不指定一个lines子句，缺省值与如果你这样写的相同： lines terminated by'\n'
+例如：load data infile "s:/tab_user.txt" replace into table test fields terminated by ',' lines terminated by '/n';

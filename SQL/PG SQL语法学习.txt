@@ -1,0 +1,39 @@
+1.关联更新：
+update itran_wireless_externalnrcelllte  a
+set fivegstac=b.tac,centerfreq=b.ssbARFCN ,mcclist=split_part(b.plmnDU,'-',1),mnclist=split_part(b.plmndu,'-',2)
+from itran_wireless_consistantCheck b
+where a.ManagedElement=b.ManagedElement and a.ldn = b.ldn and a.mcc = b.mcc and a.mnc = b.mnc and 
+a.gnodebid = b.gNodeBId and a.celllocalid = b.cellLocalId
+*********tip:set之后待更新主表不能添加缩写表名
+2.关联删除：
+delete  from  nr_intraplanresult a using nr_intranbrrelation b where b.nenodebid=a.mcc and a.add_del='ForceDel'
+
+
+
+3.FDW 外部表
+
+		CREATE SERVER foreign_server
+        FOREIGN DATA WRAPPER postgres_fdw
+        OPTIONS (host '10.92.164.152', port '9876', dbname 'mydb');
+     
+       CREATE USER MAPPING FOR root
+        SERVER foreign_server
+        OPTIONS (user 'root', password 'root123');
+       
+       
+       CREATE FOREIGN TABLE foreign_table (
+        id integer NOT NULL,
+        xmlpath text
+		)
+        SERVER foreign_server
+        OPTIONS (schema_name 'public', table_name 'xml_template');
+       
+       drop foreign  table foreign_table;
+      
+      drop server foreign_server;
+       
+       DROP USER mapping for root server foreign_server;
+       
+       select * from foreign_table
+
+https://blog.csdn.net/cjhnbls/article/details/100972776

@@ -1,0 +1,27 @@
+一、在windows环境下修改pip镜像源的方法(以python3.5为例)
+
+(1):在windows文件管理器中,输入 %APPDATA%
+
+(2):会定位到一个新的目录下，在该目录下新建pip文件夹，然后到pip文件夹里面去新建个pip.ini文件
+
+(3):在新建的pip.ini文件中输入以下内容，搞定文件路径："C:\Users\Administrator\AppData\Roaming\pip\pip.ini"
+
+
+[global]  
+timeout = 6000  
+index-url = http://mirrors.zte.com.cn/pypi/simple  
+trusted-host = mirrors.zte.com.cn 
+
+二、在未成功安装pip的情况下【python为免安装版本】可 
+通过 python -m pip install scipy (-m为指明python版本并调用pip)
+
+
+
+https://artsz.zte.com.cn/artifactory/public-maven-virtual/
+
+
+首先需要弄清楚str和unicode的区别。str是字节串，由unicode经过编码(encode)后的字节组成的。unicode才是真正意义上的字符串，由字符组成。在编程过程中，必须搞明白要处理的是str还是unicode, 使用对的处理方法(str.decode/unicode.encode)。一个简单的原则是：不要对str使用encode，不要对unicode使用decode（事实上str可以使用encode的，但不建议这么做，这里就不再赘述了。
+
+str <-> [unicode]   str(decode)  unicode(encode)
+unicode <-> utf8/gbk <-> string-escape
+unicode <-> unicode-escape

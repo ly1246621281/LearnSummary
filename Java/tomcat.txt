@@ -1,0 +1,10 @@
+1.Tomcat 虚拟目录的概念：
+    tomcat可以提供多个实例共同使用一个Tomcat软件。实例拥有自己的目录结构以及不同的磁盘位置。
+    具体概念就是CATALINA_HOME  和  CATALINA_BASE.前者是软件的安装目录，而后者是web应用的实例目录[包括conf.log.work.]
+    使用IDEA配置TOMCAT运行web程序时，会有IDEA自己的tomcat虚拟目录CATALINA_BASE。可以再IDEA中修改[Startup/Connection--pass environment variable--添加CATALINA_BASE]
+
+    TOMCAT 虚拟目录调用过程是：bin下catalina.bat中判断是否CATALINA_BASE为空则设置否则为CATALINA_HOME目录。
+      然后加载conf/Catalina/localhost/下的XML--具体XML中 是path为访问路径，docBase为web应用发布路径。
+2.补充Tomcat = web容器(实现对Servlet和JSP的支持)+HTTP服务器
+
+TOMCAT详解 -- https://blog.csdn.net/past__time/article/details/79589658

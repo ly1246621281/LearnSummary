@@ -1,0 +1,72 @@
+
+PG数据库使用工具导出文件：-c 清除后创建
+pg_dump -U root -p 9876 -t xml_template mydb  > d:\export.sql
+pg_dump.exe --format=c --encoding=UTF-8 -n public --verbose --host=localhost --port=9876 --username=root mydb
+
+导入文件：
+psql -d mydb -U root -f  d:\export.sql
+
+Copy语句导入文件：
+copy "checkresultsample" from 'C:\Users\10224556\Desktop/checkresultsample.csv' delimiter as',' csv quote as '"'  HEADER;
+
+Copy语句导出文件：
+copy (select * from xml_template) to 'd:\\result.csv'  delimiter as',' csv quote as '"'  HEADER;
+
+导出所有非表文件：-c 清除后创建
+pg_dump  -U root -p 9876 -T *  mydb > d:\proc_log.sql
+
+
+
+MYSQL: 
+
+1.导出整个数据库
+mysqldump -u 用户名 -p 数据库名 > 导出的文件名
+mysqldump -u dbuser -p dbname > dbname.sql
+
+2.导出一个表
+mysqldump -u 用户名 -p 数据库名 表名> 导出的文件名
+mysqldump -u dbuser -p dbname users> dbname_users.sql 
+eg:mysqldump -uroot  zktest users > sqltable.sql 带drop，createtable，带数据
+eg：mysqldump -uroot -d zktest users > sqltable.sql  带drop，createtable,不带数据
+ -n --no-create-db：只导出数据，而不添加CREATE DATABASE 语句。
+ -t --no-create-info：只导出数据，而不添加CREATE TABLE 语句。
+ 
+mysql使用的导出语句======mysqldump -uroot --skip-add-drop-table  --insert-ignore zktest users>sqltable.sql=====================
+对应的数据表导入语句=====mysql -uroot --force zktest<sqltable.sql==================
+mysql导出存储过程+函数======mysqldump -uroot -ntd -R  zktest >sqltable.sql
+
+
+3.导入文件：
+mysql -u用户名 -p密码 数据库名 < 数据库名.sql
+
+**********************************************************
+查看指定数据表表结构
+SELECT
+A.ordinal_position,
+A.column_name,
+CASE A.is_nullable WHEN 'NO' THEN 0 ELSE 1 END AS is_nullable,
+A.udt_name as type,
+coalesce(A.character_maximum_length, A.numeric_precision, -1) as length,
+A.numeric_scale,
+CASE WHEN length(B.attname) > 0 THEN 1 ELSE 0 END AS is_pk
+from
+information_schema.columns A
+LEFT JOIN (
+	SELECT
+		pg_attribute.attname,
+		pg_class.relname
+	FROM
+		pg_index,
+		pg_class,
+		pg_attribute
+	WHERE
+	 pg_index.indrelid = pg_class.oid
+	AND pg_attribute.attrelid = pg_class.oid
+	AND pg_attribute.attnum = ANY (pg_index.indkey)
+) B ON A.column_name = b.attname
+and a.table_name = b.relname
+WHERE
+	A.table_schema = 'public'
+AND A.table_name = 'test'
+ORDER BY
+	ordinal_position ASC;

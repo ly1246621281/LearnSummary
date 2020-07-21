@@ -1,0 +1,36 @@
+select a.dwvideoip,(a.emiScore),(b.passscore) from videoEMIRes a left join vidpassscoredict b on  a.videoresolution between b.ratemin and b.ratemax
+
+/* between and*/
+select * from vidpassscoredict b where b.ratemin between 0 and 3
+
+/* Update中有if判断*/
+UPDATE dd_stml_stat SET stat_value=(IF(stat_value>1,stat_value-1,0)) WHERE stat_id=10;
+
+/* 先关联后更新*/
+update videoEMIRes a
+left join vidpassscoredict b 
+on a.videoresolution between b.ratemin and b.ratemax
+set a.imsi=1
+where (a.emiScore)-(b.passscore)>0
+
+
+/* not exists 用于作为条件[往往常量or事实填写]，决定前面语句是否执行*/
+INSERT INTO vidpassscoreDICTe (rangeindex) SELECT '20' FROM dual WHERE NOT EXISTS (SELECT ratemin FROM vidpassscoreDICTe WHERE 1=1)
+
+
+/* insert ignore  和 replace into*/
+insert ignore into  vidpassscoredicte(rangeindex,ratemin,passscore) values(20,20,20)
+
+replace into  vidpassscoredicte(rangeindex,ratemin,passscore) values(20,20,20)
+注：insert ignore into 如果有重复unique限制的语句插入，忽略报错并且忽略插入；而replace into如果有重复unique限制的语句插入，
+    则先删除掉然后插入，2 rows affected  正常是 1rows affect
+    
+/* 建表 带auto_increment */
+create table vidpassscoreDICTe(
+rangeindex int not null AUTO_INCREMENT primary key,
+ratemin int not null,
+ratemax int default 1000,
+time01 timestamp not null ,
+time02 date not null
+)
+[注：timestamp 和 auto_increment 赋值为null 时，会有默认值（当前时间点和自增值）。同时auto_increment 一张表只有一个，同时必须为key]
